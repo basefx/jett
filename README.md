@@ -84,6 +84,9 @@ A web client is implemented using [SpringFox](http://springfox.github.io/springf
 If server runs successfully click the following link to open Swagger UI 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
+API UI Screenshot:
+
+![Swagger UI](swagger-screenshot.png)
 
 ## Run CLI Client
 ```
