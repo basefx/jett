@@ -79,8 +79,9 @@ java -jar server/target/server-1.0-SNAPSHOT.jar
 ```
 Recommended to run it in a separate console
 ## Web Client 
-A web client implemented as simple Swagger UI application
-If server runs successfully Swagger UI is 
+A web client is implemented using [SpringFox](http://springfox.github.io/springfox/) library to automate API UI creation 
+
+If server runs successfully click the following link to open Swagger UI 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 
