@@ -7,15 +7,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,24 +63,50 @@ public class ClientServiceImplTest {
     }
 
     @Test
+    public void testAddDocumentFail() {
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), captor.capture(), eq(String.class)))
+                .thenThrow(new RestClientException("Test exception"));
+
+        clientService.addDocument(TEST_STRING2);
+
+    }
+
+    @Test
     public void testGetDocument() {
-        when(restTemplate.getForObject(anyString(), eq(String.class)))
+        when(restTemplate.getForObject(anyString(), eq(String.class), any(Object.class)))
                 .thenReturn(TEST_STRING);
 
         clientService.getDocument(TEST_STRING2);
 
-        verify(restTemplate).getForObject(anyString(), eq(String.class));
+        verify(restTemplate).getForObject(anyString(), eq(String.class), any(Object.class));
+    }
+
+    @Test
+    public void testGetDocumentFail() {
+        when(restTemplate.getForObject(anyString(), eq(String.class), any(Object.class)))
+                .thenThrow(new RestClientException("Test exception"));
+
+        clientService.getDocument(TEST_STRING2);
     }
 
     @Test
     public void testSearchDocuments() {
-        when(restTemplate.getForObject(captorString.capture(), eq(String.class)))
+        when(restTemplate.getForObject(captorString.capture(), eq(String.class), any(Object.class)))
                 .thenReturn(TEST_STRING);
 
         clientService.searchDocuments(TEST_STRING2);
 
-        verify(restTemplate).getForObject(anyString(), eq(String.class));
-        assertEquals("?tokens=" + TEST_STRING2, captorString.getValue());
+        verify(restTemplate).getForObject(anyString(), eq(String.class), eq(TEST_STRING2));
+        assertEquals("/search?tokens={tokens}", captorString.getValue());
+    }
+
+    @Test
+    public void testSearchDocumentsFail() {
+        when(restTemplate.getForObject(anyString(), eq(String.class), any(Object.class)))
+                .thenThrow(new RestClientException("Test exception"));
+
+        clientService.searchDocuments(TEST_STRING2);
+
     }
 
 }

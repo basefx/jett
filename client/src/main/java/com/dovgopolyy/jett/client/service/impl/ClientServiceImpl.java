@@ -8,9 +8,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import static java.util.Collections.*;
 
 @Service
@@ -30,7 +27,7 @@ public class ClientServiceImpl implements ClientService {
             headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
             HttpEntity<String> requestEntity = new HttpEntity<>(tokens, headers);
             ResponseEntity<String> result =
-                    restTemplateSupplier.get().exchange("/document", HttpMethod.POST, requestEntity, String.class);
+                    restTemplateSupplier.get().exchange("/search/document", HttpMethod.POST, requestEntity, String.class);
 
             System.out.println("Id: " + result.getBody());
 
@@ -43,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
         try {
 
 
-            String result = restTemplateSupplier.get().getForObject("/document/"+id, String.class);
+            String result = restTemplateSupplier.get().getForObject("/search/document/{id}", String.class, id);
 
             System.out.println("Document: " + result);
 
@@ -54,15 +51,13 @@ public class ClientServiceImpl implements ClientService {
 
     public void searchDocuments(String tokens) {
         try {
-
-            String result = restTemplateSupplier.get().getForObject("?tokens="+ URLEncoder.encode(tokens, "UTF-8"), String.class);
+            String result = restTemplateSupplier.get()
+                    .getForObject("/search?tokens={tokens}", String.class, tokens);
 
             System.out.println("Document: " + result);
 
         } catch (RestClientException e) {
             log.warn(e.getMessage(), e);
-        } catch (UnsupportedEncodingException e) {
-            log.error(e.getMessage(), e);
         }
     }
 
