@@ -1,0 +1,21 @@
+create table document
+(
+   id int AUTO_INCREMENT PRIMARY KEY,
+   data varchar(65535) not null
+);
+
+create table token
+(
+   id int AUTO_INCREMENT PRIMARY KEY,
+   token varchar(255) not null
+);
+
+
+create table token_document
+(
+   token_id integer not null,
+   document_id integer not null,
+   foreign key (token_id) references token(id),
+   foreign key (document_id) references document(id)
+);
+

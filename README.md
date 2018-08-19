@@ -2,6 +2,9 @@
 
 An exercise task to develop a simple search engine using Java with Spring Boot
 
+## Data store
+This version based on H2 in-memory database
+
 ## Getting Started
 Clone from github: 
 
