@@ -131,7 +131,3 @@ Type command `end` press enter.
 ## Acknowledgments
 
 * All commands are given for unix-like systems
-
-
-
-
